@@ -14,6 +14,7 @@ When the integrated blue button is pushed a predefined letter is being printed o
 - Baudrate 115200
 - 8 bit
 - no parity
+- 1 stop bit
 
 ## Read UART
 
