@@ -9,6 +9,7 @@ typedef enum ERR_CODE{
 	INCORRECT_GPIO_TX =-1,
 	NOT_INITIALIZED = -2,
 	ALREADY_INITIALIZED = -3,
+	UNSUPPORTED = -4,
 } ErrCode;
 
 /*

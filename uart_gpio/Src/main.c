@@ -29,7 +29,7 @@ int main(void)
 {
 	led_init();
 	led_off();
-	if(uart_init(GPIOD, USART2, 115200) == OK)
+	if(uart_init(GPIOA, USART2, 115200) == OK)
 	{
 		led_on();
 		while(1){
