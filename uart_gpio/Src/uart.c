@@ -15,7 +15,6 @@
 #define CR1_TE			(1U<<3)
 #define OVER8 			0U
 #define DEFAULT_CLK		16000000U
-#define SR_TC			(1u<<6)
 #define SR_TXE			(1u<<7)
 #define USART2EN		(1u<<17)
 
