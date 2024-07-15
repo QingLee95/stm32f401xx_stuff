@@ -5,9 +5,16 @@ When the integrated blue button is pushed a predefined letter is being printed o
 - Configure TX GPIO for UART
 - Configure UART
 - Configure GPIO of blue button as input
-- Send 1 character to the laptop when blue botton is pushed
+- Send text to the laptop when blue botton is pushed
 
-* Use CMSIS(Common Microcontroller Software Interface Standard) way
+For example with 3 button presses:
+```
+Exercise:
+	UART
+	GPIO: input
+```
+
+*Use CMSIS(Common Microcontroller Software Interface Standard) way
 
 ## UART specs
 
@@ -20,5 +27,7 @@ When the integrated blue button is pushed a predefined letter is being printed o
 
 On linux via screen
 
-
+```
+screen /dev/ttyACM0 115200
+```
 
