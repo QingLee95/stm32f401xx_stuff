@@ -46,19 +46,19 @@ int main(void)
 {
 	led_init();
 	led_off();
-	if(uart_init(GPIOA, UART, BAUDRATE) == OK)
+	if(uart_init(GPIOA, UART, BAUDRATE) != OK)
 	{
-		gpio_init_user_btn();
-		led_on();
-		uint8_t index = 0;
-		while(1){
-			if(gpio_user_btn_pressed()){
-				printf("\r%s\n", msg[index++%MSG_SIZE]);
-			}
-
-		}
+		return -1;
 	}
 
+	gpio_init_user_btn();
+	led_on();
+	uint8_t index = 0;
+	while(1){
+		if(gpio_user_btn_pressed()){
+			printf("\r%s\n", msg[index++%MSG_SIZE]);
+		}
+	}
 	return 0;
 }
 
