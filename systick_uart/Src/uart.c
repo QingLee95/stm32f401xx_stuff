@@ -33,7 +33,9 @@ static inline uint8_t is_usart_2(USART_TypeDef* uart){
 	return uart == USART2;
 }
 
-static void configure_uart_tx_pin(GPIO_TypeDef* gpio_tx, USART_TypeDef* uart){
+static void configure_uart_tx_pin(USART_TypeDef* uart){
+	//TODO: Check for other uarts
+	GPIO_TypeDef* gpio_tx = GPIOA;
 	//Enable clock for GPIO
 	RCC->AHB1ENR |=  GPIOAEN;
 	//Set mode of GPIO to alternate function (10)
@@ -64,7 +66,7 @@ static uint16_t calc_usartdiv(uint32_t baudrate){
 	return ret;
 }
 
-static ErrCode validate(GPIO_TypeDef* gpio_tx, USART_TypeDef* uart){
+static ErrCode validate(USART_TypeDef* uart){
 	if(s_initialized){
 		return ALREADY_INITIALIZED;
 	}
@@ -72,24 +74,18 @@ static ErrCode validate(GPIO_TypeDef* gpio_tx, USART_TypeDef* uart){
 	if(!is_usart_2(uart)){
 		return UNSUPPORTED;
 	}
-	if(is_usart_1(uart) && !is_gpio_a(gpio_tx)){
-		return INCORRECT_GPIO_TX;
-	}
-	if(is_usart_2(uart) && !is_gpio_a(gpio_tx)){
-		return INCORRECT_GPIO_TX;
-	}
 	return OK;
 }
 
 
 // Public functions
-ErrCode uart_init(GPIO_TypeDef* gpio_tx, USART_TypeDef* uart, uint32_t baudrate){
+ErrCode uart_init(USART_TypeDef* uart, uint32_t baudrate){
 	ErrCode ret = OK;
-	if((ret = validate(gpio_tx, uart)) != OK){
+	if((ret = validate(uart)) != OK){
 		return ret;
 	}
 
-	configure_uart_tx_pin(gpio_tx, uart);
+	configure_uart_tx_pin(uart);
 	//Enable clock for uart
 	if(is_usart_2(uart)){
 		RCC->APB1ENR |= USART2EN;

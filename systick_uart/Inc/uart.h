@@ -15,6 +15,6 @@ typedef enum ERR_CODE{
 /*
  * return 0 OK
  * */
-ErrCode uart_init(GPIO_TypeDef* gpio_tx, USART_TypeDef* uart, uint32_t baudrate);
+ErrCode uart_init(USART_TypeDef* uart, uint32_t baudrate);
 
 ErrCode uart_write(USART_TypeDef* uart, uint8_t ch);

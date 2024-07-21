@@ -18,16 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "uart.h"
-#include "debug_led.h"
-#include "gpio.h"
-
+#include "systick.h"
 #include <stm32f4xx.h>
 #include <stdio.h>
 
 #define BAUDRATE 115200
 #define UART USART2
-#define MSG_SIZE 3
-static const char* msg[MSG_SIZE] = {"Exercise:", "	UART", "	GPIO: input"};
+
 
 //define when printf is used it is written to the uart
 int __io_putchar(int ch){
@@ -44,20 +41,19 @@ int __io_putchar(int ch){
   */
 int main(void)
 {
-	led_init();
-	led_off();
-	if(uart_init(GPIOA, UART, BAUDRATE) != OK)
+	if(uart_init(UART, BAUDRATE) != OK)
 	{
 		return -1;
 	}
 
-	gpio_init_user_btn();
-	led_on();
-	uint8_t index = 0;
+	uint32_t seconds = 0;
 	while(1){
-		if(gpio_user_btn_pressed()){
-			printf("\r%s\n", msg[index++%MSG_SIZE]);
-		}
+		uint8_t mins = seconds/60;
+		uint8_t hours = mins/60;
+		printf("\r%hu:%hu:%hu\n", hours, (mins%60), (seconds%60));
+        systick_delay_ms(1000);
+        ++seconds;
+
 	}
 	return 0;
 }
