@@ -58,7 +58,6 @@ void convert_number_two_digits(char* str, uint8_t digits, uint8_t index){
 
 }
 
-// "00:00:00"
 void format_time(char* str, uint8_t hours, uint8_t mins, uint8_t secs){
 	if(strlen(str) < (TIME_FORMAT_SIZE - 1)){
 		return;
@@ -84,9 +83,9 @@ int main(void)
 	printf("\r                                      ");
 	uint32_t seconds = 0;
 	while(1){
-		uint8_t mins = seconds/60;
-		uint8_t hours = mins/60;
-		format_time(s_time_format, hours, (uint8_t)(mins%60), (uint8_t)(seconds%60));
+		uint32_t mins = seconds/60;
+		uint32_t hours = mins/60;
+		format_time(s_time_format, (uint8_t)(hours%100), (uint8_t)(mins%60), (uint8_t)(seconds%60));
 		printf("\r%s", s_time_format);
 
 		//printf prints to stdout standard and that is buffered. Without newline it will print nothing
