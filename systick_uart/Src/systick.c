@@ -10,6 +10,7 @@
 
 void systick_delay_ms(uint32_t delay){
 	SysTick->LOAD = CLK_COUNTER_MS;
+	SysTick->VAL = 0;
 	SysTick->CTRL |= (ENABLE | CLKSOURCE);
 
 	for(uint32_t i = 0; i<delay; i++){
