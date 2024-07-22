@@ -26,6 +26,13 @@
 
 #define BAUDRATE 115200
 #define UART USART2
+#define TIME_FORMAT_SIZE 9
+#define INDEX_HOUR 0
+#define INDEX_MIN 3
+#define INDEX_SEC 6
+
+//"00:00:00\0"
+static char s_time_format[TIME_FORMAT_SIZE]="00:00:00\0";
 
 
 //define when printf is used it is written to the uart
@@ -37,23 +44,28 @@ int __io_putchar(int ch){
 	return -1;
 }
 
-// str needs to contain 3 elements (2 digits and null char)
-void convertNumberTwoDigits(char* str, uint8_t digits){
-	if(strlen(str) != 2 || digits > 100){
-		return;
-	}
+
+void convert_number_two_digits(char* str, uint8_t digits, uint8_t index){
 	if(digits < 10){
-		str[0]= '0';
-		//48 == '0' ascii
-		str[1]= ('0' + digits);
+		str[index]= '0';
+		str[index+1]= ('0' + digits);
 	}
 	else
 	{
-		//48 == '0' ascii
-		str[0] = ('0' + (digits/10));
-		str[1]= ('0' + (digits-10));
+		str[index] = ('0' + (digits/10));
+		str[index+1]= ('0' + (digits%10));
 	}
 
+}
+
+// "00:00:00"
+void format_time(char* str, uint8_t hours, uint8_t mins, uint8_t secs){
+	if(strlen(str) < (TIME_FORMAT_SIZE - 1)){
+		return;
+	}
+	convert_number_two_digits(str, hours, INDEX_HOUR);
+	convert_number_two_digits(str, mins, INDEX_MIN);
+	convert_number_two_digits(str, secs, INDEX_SEC);
 }
 
 /**
@@ -74,20 +86,14 @@ int main(void)
 	while(1){
 		uint8_t mins = seconds/60;
 		uint8_t hours = mins/60;
-		char secsStr[] = "00";
-		char minsStr[] = "00";
-		char hoursStr[] = "00";
-		convertNumberTwoDigits(secsStr, (uint8_t)(seconds%60));
-		convertNumberTwoDigits(minsStr, mins);
-		convertNumberTwoDigits(hoursStr, hours);
-		printf("\r%s:%s:%s\r", hoursStr, minsStr, secsStr);
+		format_time(s_time_format, hours, (uint8_t)(mins%60), (uint8_t)(seconds%60));
+		printf("\r%s", s_time_format);
 
 		//printf prints to stdout standard and that is buffered. Without newline it will print nothing
 		//io_putchar() will not be called. Calling fflush(stdout) will flush the buffer
 		fflush(stdout);
 		systick_delay_ms(1000);
 		++seconds;
-
 	}
 	return 0;
 }
