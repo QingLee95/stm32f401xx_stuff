@@ -1,4 +1,7 @@
 # Bare metal programming
-Playing around with the STM32F401xx board.
+Playing around with the STM32F401xx board without the STM32CUBE IDE.
 
-* Only my code without STM32 headers
+# Depencencies
+
+* [arm-none-eabi toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads) 
+* [OpenOCD](https://github.com/openocd-org/openocd)
