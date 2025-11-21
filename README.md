@@ -9,7 +9,11 @@ Credits to [Klein Embedded](https://kleinembedded.com/stm32-without-cubeide-part
 * [arm-none-eabi toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads) 
 * [OpenOCD](https://github.com/openocd-org/openocd)
 
-## OpenOCD
+# Compilation
+
+
+
+# OpenOCD - Flash binary on target
 Installation on Debian
 
 ```bash
@@ -17,52 +21,18 @@ sudo apt install openocd
 ```
 Or compile from source.
 
-Connect the MCU with a USB cable and replace {BINARY}
+## ELF file
+
+Connect the MCU with a USB cable and replace {BINARY.elf}.
 
 ```bash
-openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c "program {BINARY} verify reset exit"
+openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c "program {BINARY.elf} verify reset exit"
 ```
 
-## Toolchain
+# Binary
 
-Beside this directory, I have somewhere a directory containing the toolchain.
+Connect the MCU with a USB cable and replace {BINARY.bin}.
 
 ```bash
-.
-└── stm32f401_toolchain
-    ├── arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi
-    └── environtment-setup-cortexm4-none-eabi
+openocd -f interface/stlink.cfg -f target/stm32f4x.cfg  -c "init; reset halt; flash write_image erase {BINARY.bin} 0x08000000 verify; reset run; exit"
 ```
-
-Content of the environment file
-```bash
-ENV_DIR=$(cd $(dirname $(readlink -f "${BASH_SOURCE[0]}")) && pwd)
-ARM_NONE_EABI_PATH=${ENV_DIR}/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin/
-CROSS_COMPILE=arm-none-eabi-
-
-# Path
-export PATH="$ARM_NONE_EABI_PATH:$PATH"
-# Compilation tools
-export AR=${CROSS_COMPILE}ar
-export CC=${CROSS_COMPILE}gcc
-export LD=${CROSS_COMPILE}ld
-export GDB=${CROSS_COMPILE}gdb
-export SIZE=${CROSS_COMPILE}size
-export OBJCOPY=${CROSS_COMPILE}objcopy
-export OBJDUMP=${CROSS_COMPILE}objdump
-
-
-stm32_flash()
-{
-    interface="interface/stlink.cfg"
-    target="target/stm32f4x.cfg"
-    echo "Use OpenOCD $interface $target bin: '$1'"
-    openocd -f $interface -f $target -c "program $1 verify reset exit"
-}
-```
-
-```bash
-source environtment-setup-cortexm4-none-eabi
-```
-
-Now you can use ```cmake``` (using the cross compiler and linker) and the ```stm32_flash``` method.
