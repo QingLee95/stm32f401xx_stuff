@@ -34,5 +34,5 @@ openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c "program {BINARY.elf} 
 Connect the MCU with a USB cable and replace {BINARY.bin}.
 
 ```bash
-openocd -f interface/stlink.cfg -f target/stm32f4x.cfg  -c "init; reset halt; flash write_image erase {BINARY.bin} 0x08000000 verify; reset run; exit"
+openocd -f interface/stlink.cfg -f target/stm32f4x.cfg  -c "init; reset halt; flash write_image erase {BINARY.bin} 0x08000000 bin; reset run; exit"
 ```
