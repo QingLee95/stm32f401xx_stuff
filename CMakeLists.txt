@@ -19,3 +19,4 @@ link_libraries(myc)
 
 add_subdirectory(uart_gpio)
 add_subdirectory(systick_uart)
+add_subdirectory(i2c_display_dma_irq)
